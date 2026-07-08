@@ -1,0 +1,134 @@
+============================================================
+  GUIDE DE DÉMARRAGE — ASSISTANT SANTÉ BURKINA FASO (RAG)
+  Projet Data Science Master 1 IFOAD 2026
+============================================================
+
+STRUCTURE DU PROJET
+--------------------
+assistant_sante_burkina/
+├── data/                        ← Vos fichiers de données (.txt, .pdf)
+│   ├── paludisme.txt
+│   ├── dengue.txt
+│   ├── nutrition.txt
+│   └── pharmacies_centres_sante.txt
+├── chroma_db/                   ← Créé automatiquement par ingest.py
+├── app.py                       ← Application Streamlit (interface chat)
+├── ingest.py                    ← Script d'ingestion et vectorisation
+├── requirements.txt             ← Dépendances Python
+└── GUIDE_DEMARRAGE.txt          ← Ce fichier
+
+------------------------------------------------------------
+ÉTAPE 0 : OBTENIR UNE CLÉ API GROQ GRATUITE
+------------------------------------------------------------
+1. Aller sur https://console.groq.com
+2. Créer un compte gratuit (avec votre email)
+3. Cliquer sur "API Keys" dans le menu
+4. Cliquer "Create API Key" → Copier la clé (commence par gsk_...)
+   IMPORTANT : Sauvegarder cette clé, elle n'est affichée qu'une seule fois !
+
+------------------------------------------------------------
+ÉTAPE 1 : INSTALLER PYTHON ET LES DÉPENDANCES
+------------------------------------------------------------
+(Si Python n'est pas installé, télécharger Python 3.10+ sur python.org)
+
+Ouvrir un terminal (CMD ou PowerShell sur Windows) dans le dossier du projet :
+
+  pip install -r requirements.txt
+
+⏳ Patience : le premier téléchargement peut prendre 5 à 10 minutes.
+
+------------------------------------------------------------
+ÉTAPE 2 : PRÉPARER VOS DONNÉES
+------------------------------------------------------------
+Placer tous vos fichiers dans le dossier  data/
+- Les fichiers .txt fournis sont déjà prêts
+- Vous pouvez ajouter des PDFs officiels (OMS, Ministère de la Santé BF, etc.)
+
+------------------------------------------------------------
+ÉTAPE 3 : LANCER L'INGESTION (UNE SEULE FOIS)
+------------------------------------------------------------
+  python ingest.py
+
+Ce que fait ce script :
+  ① Charge tous les fichiers du dossier data/
+  ② Les découpe en petits segments (chunks)
+  ③ Crée des vecteurs pour chaque segment (embeddings)
+  ④ Sauvegarde tout dans chroma_db/
+
+⏳ Le premier lancement télécharge le modèle d'embeddings (~90 MB)
+   Les lancements suivants sont beaucoup plus rapides.
+
+------------------------------------------------------------
+ÉTAPE 4 : LANCER L'APPLICATION
+------------------------------------------------------------
+  streamlit run app.py
+
+→ L'application s'ouvre automatiquement dans votre navigateur
+  à l'adresse : http://localhost:8501
+
+→ Entrez votre clé Groq dans la barre latérale
+→ Commencez à poser des questions !
+
+------------------------------------------------------------
+ÉTAPE 5 : DÉPLOYER EN LIGNE (Streamlit Community Cloud)
+------------------------------------------------------------
+Pour obtenir un lien public (requis pour la livraison) :
+
+1. Créer un compte GitHub (github.com) si vous n'en avez pas
+2. Créer un nouveau dépôt GitHub et y mettre tous les fichiers du projet
+   (ATTENTION : ne pas inclure chroma_db/ — trop volumineux)
+3. Aller sur https://share.streamlit.io
+4. Se connecter avec GitHub
+5. Cliquer "New app" → Choisir votre dépôt → Fichier principal : app.py
+6. Dans "Secrets" (⚙️ Settings → Secrets), ajouter :
+   GROQ_API_KEY = "votre_clé_gsk_..."
+7. Cliquer "Deploy" → Vous obtenez un lien public !
+
+------------------------------------------------------------
+QUESTIONS FRÉQUENTES (FAQ)
+------------------------------------------------------------
+
+Q : L'ingestion plante avec une erreur de mémoire ?
+R : Réduire CHUNK_SIZE à 300 dans ingest.py
+
+Q : La réponse est "Je ne dispose pas de cette information" ?
+R : Votre question est hors du domaine des données. Ajoutez plus de
+    documents dans data/ sur ce sujet.
+
+Q : Comment ajouter de nouveaux documents ?
+R : Copiez le fichier dans data/ puis relancez : python ingest.py
+
+Q : Peut-on utiliser des PDFs officiels ?
+R : Oui ! Ex : rapports OMS, guides du Ministère de la Santé du BF.
+    Copiez-les dans data/ et relancez ingest.py.
+
+Q : L'application est lente ?
+R : Le premier chargement charge le modèle d'embeddings.
+    Les questions suivantes seront plus rapides (mise en cache).
+
+------------------------------------------------------------
+ARCHITECTURE DU SYSTÈME (pour le rapport)
+------------------------------------------------------------
+
+  Utilisateur pose une question
+          ↓
+  [Embeddings] Transformation de la question en vecteur
+          ↓
+  [ChromaDB] Recherche des k=3 segments les plus proches
+          ↓
+  [Contexte] Les segments récupérés sont injectés dans le prompt
+          ↓
+  [Groq API / LLaMA3] Le LLM génère une réponse basée sur le contexte
+          ↓
+  Réponse affichée + Sources indiquées à l'utilisateur
+
+------------------------------------------------------------
+CONTACTS ET RESSOURCES
+------------------------------------------------------------
+- Documentation LangChain : https://python.langchain.com
+- Console Groq (clé API) : https://console.groq.com
+- Déploiement Streamlit : https://share.streamlit.io
+- ChromaDB : https://docs.trychroma.com
+- HuggingFace Embeddings : https://huggingface.co/sentence-transformers
+
+============================================================
