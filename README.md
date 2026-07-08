@@ -1,4 +1,4 @@
-# 🏥 Assistant Santé Burkina Faso — Agent IA RAG
+# Assistant Santé Burkina Faso — Agent IA RAG
 
 **Projet Data Science — Master 1 IFOAD/UJKZ — 2026**  
 Option 3 : Agent d'Orientation Médicale & Prévention Sanitaire
@@ -17,12 +17,12 @@ Agent conversationnel basé sur l'architecture **RAG (Retrieval-Augmented Genera
 
 ## Thèmes couverts
 
-- 🦟 Paludisme (symptômes, prévention, traitement)
-- 🦟 Dengue (symptômes, prévention)
-- 🥗 Nutrition (alimentation locale burkinabè)
-- 💊 Choléra, Méningite, Typhoïde
-- 🤱 Santé maternelle & Vaccination (PEV)
-- 🏥 Pharmacies & CHU (annuaire + contacts urgence)
+- Paludisme (symptômes, prévention, traitement)
+- Dengue (symptômes, prévention)
+- Nutrition (alimentation locale burkinabè)
+- Choléra, Méningite, Typhoïde
+- Santé maternelle & Vaccination (PEV)
+- Pharmacies & CHU (annuaire + contacts urgence)
 
 ## Installation locale
 
