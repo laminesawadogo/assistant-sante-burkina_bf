@@ -22,13 +22,13 @@ from groq import Groq
 def auto_ingest():
     """Lance ingest.py automatiquement si les fichiers JSON sont absents."""
     if not os.path.exists("./knowledge_base.json") or not os.path.exists("./tfidf_index.json"):
-        with st.spinner("⏳ Première initialisation — construction de la base TF-IDF..."):
+        with st.spinner(" Première initialisation — construction de la base TF-IDF..."):
             result = subprocess.run(
                 [sys.executable, "ingest.py"],
                 capture_output=True, text=True
             )
             if result.returncode != 0:
-                st.error(f"❌ Erreur lors de l'ingestion :\n{result.stderr}")
+                st.error(f" Erreur lors de l'ingestion :\n{result.stderr}")
                 st.stop()
 
 auto_ingest()
@@ -105,7 +105,6 @@ QUESTIONS_TEST = [
 # ─────────────────────────────────────────────
 st.set_page_config(
     page_title="Assistant Santé Burkina Faso",
-    page_icon="🏥",
     layout="wide",
 )
 
@@ -155,7 +154,7 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
 
-    st.header("⚙️ Configuration")
+    st.header(" Configuration")
 
     # Priorité : secrets Streamlit Cloud > variable d'env > saisie manuelle
     groq_api_key = (
@@ -169,22 +168,22 @@ with st.sidebar:
             placeholder="gsk_...",
             help="Gratuit sur https://console.groq.com/keys",
         )
-        st.caption("🔗 [Créer un compte Groq gratuit](https://console.groq.com)")
+        st.caption(" [Créer un compte Groq gratuit](https://console.groq.com)")
     else:
-        st.success("✅ Clé API chargée")
+        st.success(" Clé API chargée")
 
     st.divider()
     temperature = st.slider("Créativité (température)", 0.0, 1.0, 0.2, 0.1,
                             help="0 = réponses plus sûres, 1 = plus créatives")
 
     st.divider()
-    if st.button("🗑️ Effacer la conversation", use_container_width=True):
+    if st.button(" Effacer la conversation", use_container_width=True):
         st.session_state.messages = []
         st.session_state.stats = {"questions": 0, "hallucinations": 0}
         st.rerun()
 
     st.divider()
-    st.markdown("**💬 Questions rapides :**")
+    st.markdown("** Questions rapides :**")
     exemples = [
         "Symptômes du paludisme ?",
         "Prévenir la dengue ?",
@@ -202,7 +201,7 @@ with st.sidebar:
 # ─────────────────────────────────────────────
 # CHARGEMENT (base + index TF-IDF)
 # ─────────────────────────────────────────────
-@st.cache_data(show_spinner="⏳ Chargement de la base de connaissances...")
+@st.cache_data(show_spinner=" Chargement de la base de connaissances...")
 def charger_donnees():
     if not os.path.exists(KB_FILE) or not os.path.exists(TFIDF_FILE):
         return [], {}, []
@@ -323,7 +322,7 @@ segments, idf, vecteurs = charger_donnees()
 
 if not segments:
     st.error("""
-    ❌ **Base de connaissances introuvable.**
+     **Base de connaissances introuvable.**
     Lancez d'abord dans votre terminal (depuis le dossier du projet) :
     ```
     python ingest.py
@@ -338,13 +337,13 @@ if "messages" not in st.session_state:
     st.session_state.messages = [{
         "role": "assistant",
         "content": (
-            "Bonjour ! 👋 Je suis votre assistant santé pour le Burkina Faso.\n\n"
+            "Bonjour !  Je suis votre assistant santé pour le Burkina Faso.\n\n"
             "Je peux vous aider sur :\n"
-            "- 🦟 **Paludisme & Dengue** : symptômes, prévention, traitement\n"
-            "- 🥗 **Nutrition** : alimentation saine avec produits locaux\n"
-            "- 💊 **Choléra, Méningite, Typhoïde** : prévention & soins\n"
-            "- 🤱 **Santé maternelle & Vaccination** : CPN, calendrier PEV\n"
-            "- 🏥 **Pharmacies & CHU** : adresses et contacts d'urgence\n\n"
+            "-  **Paludisme & Dengue** : symptômes, prévention, traitement\n"
+            "-  **Nutrition** : alimentation saine avec produits locaux\n"
+            "-  **Choléra, Méningite, Typhoïde** : prévention & soins\n"
+            "-  **Santé maternelle & Vaccination** : CPN, calendrier PEV\n"
+            "-  **Pharmacies & CHU** : adresses et contacts d'urgence\n\n"
             "Utilisez le bouton **Évaluation** pour tester mes performances.\n"
             "En cas d'urgence, appelez le **112**."
         ),
@@ -359,11 +358,11 @@ if "stats" not in st.session_state:
 # ─────────────────────────────────────────────
 st.markdown("""
 <div class="main-header">
-    <h1>🏥 Assistant Santé Burkina Faso</h1>
+    <h1> Assistant Santé Burkina Faso</h1>
     <p>Paludisme · Dengue · Nutrition · Choléra · Santé Maternelle · Vaccination · Pharmacies</p>
 </div>
 <div class="warning-box">
-    ⚠️ <b>Avertissement médical</b> : Ces informations sont générales.
+     <b>Avertissement médical</b> : Ces informations sont générales.
     Elles ne remplacent pas une consultation médicale.
     En cas d'urgence : <b>112 (SAMU)</b>.
 </div>
@@ -374,9 +373,9 @@ st.markdown("""
 # ONGLETS
 # ═══════════════════════════════════════════════════════════════════
 tab_chat, tab_eval, tab_arch = st.tabs([
-    "💬 Consultation",
-    "📊 Évaluation (Étape 4)",
-    "🏗️ Architecture",
+    " Consultation",
+    " Évaluation (Étape 4)",
+    " Architecture",
 ])
 
 
@@ -386,12 +385,12 @@ tab_chat, tab_eval, tab_arch = st.tabs([
 with tab_chat:
     col_info, col_stat = st.columns([3, 1])
     with col_info:
-        st.caption(f"📚 {len(segments)} segments indexés · Modèle : {GROQ_MODEL}")
+        st.caption(f" {len(segments)} segments indexés · Modèle : {GROQ_MODEL}")
     with col_stat:
         q = st.session_state.stats["questions"]
         h = st.session_state.stats["hallucinations"]
         if q > 0:
-            st.caption(f"🔢 {q} question(s) · ⚠️ {h} hors-domaine")
+            st.caption(f" {q} question(s) ·  {h} hors-domaine")
 
     st.divider()
 
@@ -404,19 +403,19 @@ with tab_chat:
                 score_pct = msg["score"] * 100
                 css_class = "score-box" if score_pct >= 10 else "score-box faible"
                 st.markdown(
-                    f'<div class="{css_class}">📈 Score de pertinence RAG : {score_pct:.1f}%</div>',
+                    f'<div class="{css_class}"> Score de pertinence RAG : {score_pct:.1f}%</div>',
                     unsafe_allow_html=True,
                 )
 
             if msg.get("passages"):
-                with st.expander("📄 Passages RAG utilisés", expanded=False):
+                with st.expander(" Passages RAG utilisés", expanded=False):
                     for i, p in enumerate(msg["passages"], 1):
                         st.markdown(f"**Source {i} — {p['source']}**")
                         st.markdown(f"_{p['texte'][:300]}..._")
                         st.divider()
 
             if msg.get("sources"):
-                with st.expander("📎 Sources documentaires", expanded=False):
+                with st.expander(" Sources documentaires", expanded=False):
                     for s in msg["sources"]:
                         st.caption(f"• {s}")
 
@@ -428,14 +427,14 @@ with tab_chat:
 
     if user_input:
         if not groq_api_key:
-            st.warning("👈 Entrez d'abord votre clé API Groq dans la barre latérale.")
+            st.warning(" Entrez d'abord votre clé API Groq dans la barre latérale.")
         else:
             st.session_state.messages.append({"role": "user", "content": user_input})
             with st.chat_message("user"):
                 st.markdown(user_input)
 
             with st.chat_message("assistant"):
-                with st.spinner("🔍 Recherche TF-IDF + génération LLaMA 3.1..."):
+                with st.spinner(" Recherche TF-IDF + génération LLaMA 3.1..."):
                     try:
                         # Pipeline RAG
                         passages_trouves, scores_cosinus = rechercher(
@@ -468,18 +467,18 @@ with tab_chat:
                             score_pct = score_max * 100
                             css = "score-box" if score_pct >= 10 else "score-box faible"
                             st.markdown(
-                                f'<div class="{css}">📈 Score de pertinence RAG : {score_pct:.1f}%</div>',
+                                f'<div class="{css}"> Score de pertinence RAG : {score_pct:.1f}%</div>',
                                 unsafe_allow_html=True,
                             )
 
-                        with st.expander("📄 Passages RAG utilisés", expanded=False):
+                        with st.expander(" Passages RAG utilisés", expanded=False):
                             for i, p in enumerate(passages_trouves, 1):
                                 st.markdown(f"**Source {i} — {p['source']}** (score : {scores_cosinus[i-1]:.3f})")
                                 st.markdown(f"_{p['texte'][:350]}..._")
                                 st.divider()
 
                         sources = list({p["source"] for p in passages_trouves})
-                        with st.expander("📎 Sources documentaires", expanded=False):
+                        with st.expander(" Sources documentaires", expanded=False):
                             for s in sources:
                                 st.caption(f"• {s}")
 
@@ -493,14 +492,14 @@ with tab_chat:
                         })
 
                     except Exception as e:
-                        st.error(f"❌ Erreur : {e}")
+                        st.error(f" Erreur : {e}")
 
 
 # ───────────────────────────────────────────────────────────────────
 # ONGLET 2 : ÉVALUATION
 # ───────────────────────────────────────────────────────────────────
 with tab_eval:
-    st.subheader("📊 Évaluation automatique du système RAG")
+    st.subheader(" Évaluation automatique du système RAG")
     st.markdown("""
     Ce module évalue deux dimensions de la robustesse :
     - **Precision@k** : les passages récupérés contiennent-ils les mots-clés attendus ?
@@ -508,9 +507,9 @@ with tab_eval:
     """)
 
     if not idf:
-        st.warning("⚠️ Index TF-IDF non chargé. Lancez d'abord `python ingest.py`.")
+        st.warning(" Index TF-IDF non chargé. Lancez d'abord `python ingest.py`.")
     else:
-        if st.button("▶️ Lancer l'évaluation complète (8 tests)", type="primary"):
+        if st.button(" Lancer l'évaluation complète (8 tests)", type="primary"):
             resultats = []
             progress_bar = st.progress(0, text="Évaluation en cours...")
 
@@ -554,25 +553,25 @@ with tab_eval:
             col3.metric("Taux d'échec", f"{nb_total - nb_succes}/{nb_total}")
 
             if pct >= 80:
-                st.success(f"✅ Système validé ({pct:.0f}% de réussite)")
+                st.success(f" Système validé ({pct:.0f}% de réussite)")
             elif pct >= 60:
-                st.warning(f"⚠️ Résultats partiels ({pct:.0f}%)")
+                st.warning(f" Résultats partiels ({pct:.0f}%)")
             else:
-                st.error(f"❌ Résultats insuffisants ({pct:.0f}%)")
+                st.error(f" Résultats insuffisants ({pct:.0f}%)")
 
             st.divider()
 
             # Tableau des résultats
             for r in resultats:
-                status = "✅ PASS" if r["succes"] else "❌ FAIL"
-                dom_icon = "🎯" if r["domaine"] == "in-domain" else "🚫"
+                status = "PASS" if r["succes"] else "FAIL"
+                dom_icon = "Dans le domaine" if r["domaine"] == "in-domain" else "Hors domaine"
                 css_class = "eval-pass" if r["succes"] else "eval-fail"
                 with st.expander(f"{dom_icon} {r['question']}", expanded=False):
                     st.markdown(f'<span class="{css_class}">{status}</span>', unsafe_allow_html=True)
                     st.caption(f"Type : {r['domaine']} | {r['detail']}")
 
         st.divider()
-        st.subheader("📈 Bilan de la session actuelle")
+        st.subheader(" Bilan de la session actuelle")
         q = st.session_state.stats["questions"]
         h = st.session_state.stats["hallucinations"]
         if q > 0:
@@ -588,33 +587,33 @@ with tab_eval:
 # ONGLET 3 : ARCHITECTURE
 # ───────────────────────────────────────────────────────────────────
 with tab_arch:
-    st.subheader("🏗️ Architecture du système RAG")
+    st.subheader(" Architecture du système RAG")
 
     st.markdown("### Flux de données")
     st.code("""
 ┌──────────────────────────────────────────────────────────────┐
 │                    PHASE D'INGESTION                         │
-│                      ingest.py                              │
+│                      ingest.py                               │
 │                                                              │
-│  Fichiers .txt ──► Chunking (500 car.) ──► Tokenisation     │
-│   data/*.txt        + overlap 80 car.      + stopwords FR   │
+│  Fichiers .txt ──► Chunking (500 car.) ──► Tokenisation      │
+│   data/*.txt        + overlap 80 car.      + stopwords FR    │
 │                                  │                           │
-│                             Calcul IDF ──► knowledge_base.json │
-│                          (Laplace smooth)   tfidf_index.json │
+│                           Calcul IDF ──► knowledge_base.json │
+│                        (Laplace smooth)   tfidf_index.json   │
 └──────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌──────────────────────────────────────────────────────────────┐
 │                  PHASE DE CONSULTATION                       │
-│                        app.py                               │
+│                        app.py                                │
 │                                                              │
-│  Question ──► Tokenisation ──► Vecteur TF-IDF (requête)    │
+│  Question ──► Tokenisation ──► Vecteur TF-IDF (requête)      │
 │                                       │                      │
 │                          Similarité cosinus avec index       │
 │                                       │                      │
 │                          Top-5 segments les + pertinents     │
 │                                       │                      │
-│   Historique (4 échanges) ──► PROMPT ──► Groq / LLaMA 3.1  │
+│   Historique (4 échanges) ──► PROMPT ──► Groq / LLaMA 3.1    │
 │                                       │                      │
 │              Réponse + Score + Sources + Anti-hallucination  │
 └──────────────────────────────────────────────────────────────┘
