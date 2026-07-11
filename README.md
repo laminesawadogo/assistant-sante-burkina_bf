@@ -3,7 +3,7 @@
 **Projet Data Science — Master 1 IFOAD/UJKZ — 2026**  
 Option 3 : Agent d'Orientation Médicale & Prévention Sanitaire
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://votre-app.streamlit.app)
+[![Streamlit App](https://assistant-sante-burkinabf-ds5cavaptcy9zu4g6pbkgk.streamlit.app/)]
 
 ---
 
@@ -28,7 +28,7 @@ Agent conversationnel basé sur l'architecture **RAG (Retrieval-Augmented Genera
 
 ```bash
 # 1. Cloner le dépôt
-git clone https://github.com/VOTRE_USERNAME/assistant-sante-burkina.git
+git clone https://github.com/laminesawadogo/assistant-sante-burkina_bf.git
 cd assistant-sante-burkina
 
 # 2. Installer les dépendances (seulement 2 packages !)
@@ -49,7 +49,7 @@ streamlit run app.py
 4. Sélectionner ce dépôt → `app.py`
 5. Dans **Settings → Secrets**, ajouter :
    ```
-   GROQ_API_KEY = "gsk_votre_cle_ici"
+   GROQ_API_KEY = "Inserer la clé api Groq"
    ```
 6. Cliquer **Deploy** → URL publique générée automatiquement
 
