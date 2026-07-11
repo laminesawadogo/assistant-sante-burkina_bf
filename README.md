@@ -44,12 +44,12 @@ streamlit run app.py
 ## Déploiement Streamlit Cloud
 
 1. Forker ce dépôt sur GitHub
-2. Aller sur [share.streamlit.io](https://share.streamlit.io)
+2. Aller sur [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://votre-app.streamlit.app)
 3. Connecter votre compte GitHub
 4. Sélectionner ce dépôt → `app.py`
 5. Dans **Settings → Secrets**, ajouter :
    ```
-   GROQ_API_KEY = "Inserer la clé api Groq"
+   GROQ_API_KEY = "gsk_votre_cle_ici"
    ```
 6. Cliquer **Deploy** → URL publique générée automatiquement
 
